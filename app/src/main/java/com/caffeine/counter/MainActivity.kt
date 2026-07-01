@@ -57,3 +57,58 @@ class MainActivity : AppCompatActivity() {
 
         updateCounter()
     }
+
+    private fun addCaffeine(amount: Int) {
+        caffeineMg = caffeineMg + amount
+        lastValue = amount
+        updateCounter()
+    }
+
+    private fun revertLast() {
+        caffeineMg = caffeineMg - lastValue
+
+        if (caffeineMg < 0) {
+            caffeineMg = 0
+        }
+
+        lastValue = 0
+        updateCounter()
+    }
+
+    private fun resetCounter() {
+        caffeineMg = 0
+        lastValue = 0
+        updateCounter()
+    }
+
+    private fun updateCounter() {
+        textCounter.text = caffeineMg.toString()
+        progressBar.progress = caffeineMg
+    }
+
+    private fun showCustomDialog() {
+
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle(getString(R.string.dialog_title))
+
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        input.hint = "mg"
+
+        builder.setView(input)
+
+        builder.setPositiveButton(getString(R.string.dialog_positive)) { _, _ ->
+
+            val value = input.text.toString().toIntOrNull()
+
+            if (value != null && value > 0) {
+                addCaffeine(value)
+            }
+        }
+
+        builder.setNegativeButton(getString(R.string.dialog_negative), null)
+
+        builder.show()
+    }
+}
